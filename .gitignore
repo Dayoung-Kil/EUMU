@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+
+# Local datasets and generated training artifacts.
+data/
+training_runs/
+predictions.generated.json

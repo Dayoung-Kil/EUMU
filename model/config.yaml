@@ -1,0 +1,580 @@
+inference:
+  device: cuda
+  dtype: float32
+  num_beams: 3
+  deterministic_seed: 20260830
+task_a:
+  vocab_path: task_a_vocab.json
+  head_checkpoint: task_a_heads.pt
+  default_threshold: 0.5
+  quality_default_good: true
+  quality_max_labels: 6
+  quality_stat_fusion: true
+  legacy_quality_stat_fusion: false
+  quality_stat_add_rules:
+  - label: low_contrast
+    feature: grad_aniso
+    op: '>='
+    threshold: 0.48781600832939165
+  quality_stat_drop_rules:
+  - label: overexposure
+    feature: noise_mad
+    op: <=
+    threshold: 0.0019608139991760254
+  - label: underexposure
+    feature: dark_ratio
+    op: '>='
+    threshold: 0.7257036149501802
+  - label: overexposure
+    feature: highlight_ratio
+    op: '>='
+    threshold: 0.107421875
+  - label: underexposure
+    feature: noise_std
+    op: '>='
+    threshold: 0.022527754306793213
+  - label: high_contrast
+    feature: sat_std
+    op: '>='
+    threshold: 0.06398393213748932
+  - label: high_contrast
+    feature: mean
+    op: <=
+    threshold: 0.1148478165268898
+  - label: overexposure
+    feature: sat_mean
+    op: <=
+    threshold: 0.22993481159210205
+  - label: low_contrast
+    feature: mean
+    op: '>='
+    threshold: 0.34179046618647463
+  - label: high_contrast
+    feature: grad_aniso
+    op: '>='
+    threshold: 0.25884656488895413
+  - label: underexposure
+    feature: sat_std
+    op: '>='
+    threshold: 0.227625327706337
+  - label: low_contrast
+    feature: blockiness
+    op: <=
+    threshold: -0.0005377130582928658
+  quality_stat_sequence_rules:
+  - action: add
+    label: low_contrast
+    feature: grad_aniso
+    op: '>='
+    threshold: 0.48781600832939165
+  - action: drop
+    label: high_contrast
+    feature: grad_std
+    op: '>='
+    threshold: 0.0837584909
+  - action: drop
+    label: overexposure
+    feature: highlight_ratio
+    op: '>='
+    threshold: 0.0317430644
+  - action: add
+    label: underexposure
+    feature: noise_std
+    op: '>='
+    threshold: 0.0839085294
+  - action: drop
+    label: underexposure
+    feature: grad_aniso
+    op: '>='
+    threshold: 0.3793888509
+  - action: drop
+    label: underexposure
+    feature: noise_mad
+    op: '>='
+    threshold: 0.0294117630
+  - action: drop
+    label: underexposure
+    feature: grad_std
+    op: <=
+    threshold: 0.0262630783
+  - action: add
+    label: overexposure
+    feature: sat_mean
+    op: <=
+    threshold: 0.0098939608
+  - action: drop
+    label: overexposure
+    feature: highlight_ratio
+    op: '>='
+    threshold: 0.1550542092
+  - action: drop
+    label: overexposure
+    feature: block_boundary
+    op: <=
+    threshold: 0.0158037131
+  - action: drop
+    label: high_contrast
+    feature: noise_mad
+    op: <=
+    threshold: 0.0009803920984268188
+  scene_top_k: 1
+  scene_min_prob: 0.0
+  scene_max_labels: 2
+  scene_caption_overrides:
+    rules:
+    - label: outdoor
+      terms: [exterior of]
+    - label: snow
+      terms: [snowy]
+    - label: coast
+      terms: [coastline]
+    - label: bridge
+      terms: [covered bridge]
+    - label: desert
+      terms: [sand dunes]
+    - label: forest
+      terms: [dense forest]
+    - label: indoor
+      terms: [in a greenhouse, a greenhouse, inside the greenhouse]
+    - label: bridge
+      terms: [crossing a bridge, underside of a bridge, under a bridge, bridge over a body of water]
+    - label: outdoor
+      terms: [wooden house under construction, small wooden house]
+    - label: highway
+      terms: [road with white lines marking, with white lines marking]
+    - label: river
+      terms: [view of a river, of a river]
+    - label: street
+      terms: [the street is lined, street is lined with]
+    - label: beach
+      terms: [on the beach]
+  legacy_scene_event_softmax: false
+  event_top_k: 1
+  event_min_prob: 0.0
+  event_max_labels: 2
+  event_evidence_fusion: false
+  legacy_event_evidence_fusion: false
+  event_caption_additions:
+    enabled:
+    - performance_stage_music
+    - celebration_strict
+    - celebration_life_visual
+    - religious_strict
+    - ceremony_strict
+    - marathon_strict
+    - ceremony_caption
+    - religious_place_group
+    - sports_ice_rink
+    - sports_running_race
+    - drop_exhibition_sports_event
+    - drop_conference_gallery
+    - drop_conference_exhibition
+    - drop_exhibition_road
+  event_evidence_detection_view: base_od
+  event_evidence_context_prompt: <CAPTION>
+  event_evidence_context_max_new_tokens: 128
+  fallback_tag_context_prompt: <MORE_DETAILED_CAPTION>
+  fallback_tag_context_max_new_tokens: 192
+  threshold_overrides:
+    quality:
+      high_contrast: 0.01
+      low_contrast: 0.01
+      overexposure: 0.34
+      underexposure: 0.28
+detection:
+  prompt: <OD>
+  max_new_tokens: 1024
+  limit: 300
+  nms_iou: 0.65
+  score_floor: 0.0
+  bbox_scale_by_label:
+    air_conditioner: 1.04
+    awning: 1.04
+    banana: 0.99
+    baseball: 0.96
+    baseball_bat: 0.98
+    baseball_cap: 1.01
+    baseball_glove: 0.97
+    basket: 1.01
+    bath_towel: 0.96
+    bear: 0.98
+    beer_bottle: 0.98
+    belt: 1.01
+    bench: 0.99
+    bib: 0.98
+    bird: 0.96
+    blanket: 0.99
+    boat: 0.98
+    bolt: 1.01
+    book: 0.99
+    bottle_cap: 0.97
+    bowl: 1.02
+    box: 0.99
+    bracelet: 0.98
+    button: 1.02
+    cabinet: 0.99
+    calculator: 0.99
+    candle: 0.98
+    cherry: 1.04
+    clock: 0.98
+    coat: 0.99
+    coin: 0.99
+    cone: 0.99
+    cow: 0.99
+    cowboy_hat: 0.98
+    curtain: 0.99
+    deck_chair: 0.99
+    doughnut: 0.99
+    dress: 0.99
+    earring: 0.98
+    elephant: 0.99
+    fork: 0.99
+    frisbee: 0.98
+    glove: 0.96
+    green_bean: 0.99
+    headlight: 1.02
+    helmet: 0.96
+    horse: 0.99
+    horse_carriage: 0.98
+    hose: 0.96
+    knife: 1.03
+    ladder: 0.99
+    lamp: 0.98
+    lettuce: 1.01
+    license_plate: 0.99
+    life_jacket: 0.99
+    lightbulb: 0.97
+    magnet: 0.99
+    mailbox_(at_home): 0.97
+    mask: 1.04
+    monitor_(computer_equipment) computer_monitor: 0.98
+    napkin: 1.01
+    necktie: 0.99
+    orange_(fruit): 0.99
+    painting: 0.99
+    paper_towel: 0.97
+    parking_meter: 0.99
+    pepper: 0.99
+    person: 0.98
+    pigeon: 0.97
+    pillow: 0.99
+    pizza: 1.01
+    place_mat: 1.01
+    plate: 0.99
+    pot: 0.98
+    rhinoceros: 0.98
+    ring: 1.03
+    sandal_(type_of_shoe): 0.99
+    sandwich: 1.01
+    scoreboard: 0.97
+    sheep: 1.01
+    shoe: 0.97
+    short_pants: 0.96
+    shower_head: 0.97
+    sink: 1.02
+    skateboard: 0.99
+    ski: 0.99
+    ski_boot: 0.98
+    smoothie: 0.99
+    soccer_ball: 0.96
+    sock: 1.02
+    spatula: 0.99
+    spectacles: 0.98
+    straw_(for_drinking): 0.96
+    streetlight: 0.97
+    suit_(clothing): 0.99
+    suitcase: 0.99
+    sunflower: 1.04
+    surfboard: 0.99
+    taillight: 0.99
+    teddy_bear: 0.99
+    telephone: 0.98
+    telephone_pole: 0.98
+    tennis_ball: 0.97
+    tennis_racket: 0.99
+    traffic_light: 0.97
+    tray: 1.04
+    vase: 0.99
+    visor: 0.99
+    wall_clock: 0.99
+    wall_socket: 0.99
+    wheel: 0.98
+    windshield_wiper: 1.01
+    wine_bottle: 0.99
+    wineglass: 0.99
+    zebra: 0.99
+  label_map_path: detection_eval_aliases.json
+  final_label_aliases:
+    hot dog: bun
+    flower: flower_arrangement
+    land vehicle: motorcycle
+    dessert: plate
+    plastic wrap: plastic_bag
+  final_label_duplicate_aliases:
+    doughnut:
+    - pastry
+    cow:
+    - calf
+    sheep:
+    - lamb_(animal)
+    dog:
+    - pet
+    - teddy_bear
+    shoe:
+    - flip-flop_(sandal)
+    - sandal_(type_of_shoe)
+    - boot
+    spoon:
+    - ladle
+    bread:
+    - toast_(food)
+    - pancake
+    - bun
+    bird:
+    - pelican
+    - pigeon
+    kite:
+    - parasail_(sports)
+    salad_plate:
+    - dish
+    - bowl
+    deer:
+    - gazelle
+    flowerpot:
+    - flower_arrangement
+    - bucket
+    plate:
+    - paper_plate
+    teddy_bear:
+    - bear
+    mug:
+    - glass_(drink_container)
+    - cup
+    - wineglass
+    bowl:
+    - dish
+    - plate
+    hat:
+    - headband
+    - bandanna
+    bottle:
+    - water_bottle
+    - soap
+    - wine_bottle
+    - orange_juice
+    - condiment
+    - beer_bottle
+    cup:
+    - glass_(drink_container)
+    book:
+    - magazine
+    umbrella:
+    - toothpick
+    sink:
+    - kitchen_sink
+    trousers:
+    - jean
+    pot:
+    - bucket
+    ball:
+    - tennis_ball
+    - baseball
+    cabinet:
+    - cupboard
+    backpack:
+    - suitcase
+    - person
+    wineglass:
+    - glass_(drink_container)
+    telephone:
+    - telephone_pole
+    - cellular_telephone
+    jersey:
+    - pajamas
+    - shirt
+    chair:
+    - deck_chair
+    handbag:
+    - backpack
+    blazer:
+    - suit_(clothing)
+    coffee_table:
+    - paper_plate
+    - glass_(drink_container)
+    - plate
+    bun:
+    - bread
+    sunglasses:
+    - spectacles
+    jacket:
+    - coat
+    - shirt
+    - person
+    pizza:
+    - bread
+    shirt:
+    - jersey
+    baseball_cap:
+    - hat
+    street_sign:
+    - signboard
+    remote_control:
+    - control
+    camera:
+    - cellular_telephone
+    salad:
+    - bowl
+    kitchen_table:
+    - plate
+    - sink
+    pole:
+    - ski_pole
+    helmet:
+    - hat
+    - mask
+    flag:
+    - banner
+    television_set:
+    - monitor_(computer_equipment)_computer_monitor
+    cat:
+    - teddy_bear
+    control:
+    - remote_control
+    boot:
+    - ski_boot
+    basketball:
+    - person
+  selective_ovd:
+    enabled: true
+    prompt: <OPEN_VOCABULARY_DETECTION>
+    separator: <and>
+    context_prompt: <MORE_DETAILED_CAPTION>
+    context_max_new_tokens: 96
+    max_new_tokens: 512
+    max_phrases: 24
+    default_score: 0.35
+    score_multiplier: 0.16
+    output_scores: false
+    include_detection_labels: true
+    include_context_phrases: true
+    include_unordered_context_phrases: true
+    include_inferred_compound_phrases: true
+    keep_unknown: false
+    allow_generic_phrase_labels: false
+  phrase_grounding:
+    enabled: true
+    prompt: <CAPTION_TO_PHRASE_GROUNDING>
+    context_prompt: <MORE_DETAILED_CAPTION>
+    context_max_new_tokens: 128
+    max_new_tokens: 512
+    max_phrases: 48
+    default_score: 0.3
+    score_multiplier: 0.2
+    include_detection_labels: true
+    include_context_phrases: true
+    include_unordered_context_phrases: true
+    include_inferred_compound_phrases: true
+    semantic_expansion_blocklist:
+    - tortilla
+    - butter
+    - tank_top_(clothing)
+    - paper_towel
+    - mirror
+    - blackboard
+    - faucet
+    - bowl
+    - toothbrush
+    - ski_boot
+    - necklace
+    - cellular_telephone
+    - pepper
+    - helmet
+    allow_generic_phrase_labels: false
+  extra_prompts:
+  - prompt: <DENSE_REGION_CAPTION>
+    task: <DENSE_REGION_CAPTION>
+    max_new_tokens: 1024
+    default_score: 0.35
+    score_multiplier: 0.1
+    label_mode: phrase
+    keep_unknown: false
+    allow_generic_phrase_labels: false
+  source_policy_by_label:
+    awning: broad
+    cow: broad
+    book: filtered
+    horse_carriage: broad
+    faucet: filtered
+    fork: broad
+    glass_(drink_container): broad
+    hat: broad
+    orange_juice: broad
+    sandal_(type_of_shoe): filtered
+    sink: broad
+    wheel: broad
+  source_variants:
+    broad:
+      selective_ovd:
+        semantic_expansion_blocklist: []
+      phrase_grounding:
+        semantic_expansion_blocklist: []
+    filtered:
+      selective_ovd:
+        semantic_expansion_blocklist:
+        - tortilla
+        - butter
+        - tank_top_(clothing)
+        - paper_towel
+        - mirror
+        - blackboard
+        - faucet
+        - bowl
+        - toothbrush
+        - ski_boot
+        - necklace
+        - cellular_telephone
+        - pepper
+        - helmet
+      phrase_grounding:
+        semantic_expansion_blocklist:
+        - tortilla
+        - butter
+        - tank_top_(clothing)
+        - paper_towel
+        - mirror
+        - blackboard
+        - faucet
+        - bowl
+        - toothbrush
+        - ski_boot
+        - necklace
+        - cellular_telephone
+        - pepper
+        - helmet
+  targeted_generic_ovd:
+    enabled: true
+    prompt: <OPEN_VOCABULARY_DETECTION>
+    separator: <and>
+    context_prompt: <MORE_DETAILED_CAPTION>
+    context_max_new_tokens: 96
+    max_new_tokens: 256
+    default_score: 0.25
+    score_multiplier: 0.2
+    output_scores: false
+    targets:
+    - shirt
+    - cup
+    evidence_terms:
+      shirt:
+      - shirt
+      - shirts
+      cup:
+      - cup
+      - cups
+  final_label_duplicate_score_multiplier: 0.7
+caption:
+  prompts:
+  - <MORE_DETAILED_CAPTION>
+  max_new_tokens: 128
+  char_limit: 300
+  token_limit: 30
