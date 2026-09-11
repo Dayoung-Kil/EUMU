@@ -1,5 +1,7 @@
 # Efficient Unified Multimodal Understanding (EUMU)
 
+> **Weights:** The EUMU weight files are available in [`model/`](model/) and mirrored on [Hugging Face](https://huggingface.co/Dayoung-space/EUMU).
+
 This repository contains the official implementation of **Efficient Unified
 Multimodal Understanding (EUMU)**, our first-place solution for the **Mobile
 Unified Multimodal Understanding (MUMU) Track** of the 8th Large-scale Video
