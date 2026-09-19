@@ -1,6 +1,6 @@
 # Efficient Unified Multimodal Understanding (EUMU)
 
-[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-EUMU-FFD21E?logo=huggingface&logoColor=FFD21E)](https://huggingface.co/Dayoung-space/EUMU)
+[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-EUMU-FFD21E?logo=huggingface&logoColor=FFD21E)](https://huggingface.co/Dayoung-space/EUMU) [![arXiv](https://img.shields.io/badge/arXiv-2609.19451-b31b1b.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2609.19451)
 
 This repository contains the official implementation of **Efficient Unified
 Multimodal Understanding (EUMU)**, our first-place solution for the **Mobile
